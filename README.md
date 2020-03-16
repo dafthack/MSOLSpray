@@ -12,7 +12,7 @@ Lastly, this tool works well with [FireProx](https://github.com/ustayready/firep
 
 **Brought to you by:**
 
-![Black Hills Information Security](https://www.blackhillsinfosec.com/wp-content/uploads/2016/03/BHIS-logo-L-300x300.png "Black Hills Information Security")
+[<img src="https://www.blackhillsinfosec.com/wp-content/uploads/2016/03/BHIS-logo-L-300x300.png">](https://www.blackhillsinfosec.com)
 
 ## Quick Start
 You will need a userlist file with target email addresses one per line. Open a PowerShell terminal from the Windows command line with 'powershell.exe -exec bypass'.
