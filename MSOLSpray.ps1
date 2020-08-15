@@ -288,7 +288,6 @@ function Invoke-MSOLSpray {
                 Try {
                     $TimeOfRequest = Get-Date -Format "yyyy-MM-dd hh:mm:ss"
                     $LogonRequest = Invoke-WebRequest -Uri $AuthURL -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable ResponseError
-                    Write-host "$($LogonRequest.StatusCode)"
                     If ($LogonRequest.StatusCode -eq "200") {
                         Write-Verbose "Found valid user credential. $($Username):$($Password)"
                         $OutputObject += Add-InvokeMSOLOutputToObject -Time $TimeOfRequest -Username $Username -Password $Password -IsValid $true -ResponseError "None."
@@ -401,6 +400,7 @@ function Write-MyProgressBar {
         Author: Justin Perdok, https://justin-p.me.
         Based of: https://github.com/thomas-illiet/Write-MyProgress, Thomas ILLIET, https://thomas-illiet.fr
         License: MIT
+        
     .LINK 
         https://github.com/justin-p/PowerShell/blob/master/Write-MyProgressBar.ps1
 
@@ -657,7 +657,7 @@ function Write-MyProgressBar {
     }
     Process {    
         ForEach ($Arg in $Argument.Keys) {
-            Write-Verbose $("Write-MyProgressBar - $Arg : $($Argument[$Arg])")
+            Write-Debug $("Write-MyProgressBar - $Arg : $($Argument[$Arg])")
         }
     } 
     End {
