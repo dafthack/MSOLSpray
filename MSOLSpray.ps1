@@ -286,7 +286,7 @@ function Invoke-MSOLSpray {
                     'Content-Type'        = 'application/x-www-form-urlencoded'
                 }
                 Try {
-                    $TimeOfRequest = Get-Date -Format "yyyy-MM-dd hh:mm:ss"
+                    $TimeOfRequest = Get-Date -Format o
                     $LogonRequest = Invoke-WebRequest -Uri $AuthURL -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable ResponseError
                     If ($LogonRequest.StatusCode -eq "200") {
                         Write-Verbose "Found valid user credential. $($TimeOfRequest):$($Username):$($Password)"
