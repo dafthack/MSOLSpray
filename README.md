@@ -93,7 +93,7 @@ PS C:\> Invoke-MSOLSpray -Usernames Steve@domain.com -Passwords Winter2020,Summe
 Valid results have been written to C:\outfile.txt
 
 PS C:\> Get-Content C:\outfile.txt
-Steve@domain.com : Winter2020 : None.
+2020-08-14 12:25:15 : Steve@domain.com : Winter2020 : None.
 ```
 
 ### Invoke-MSOLSpray Options
