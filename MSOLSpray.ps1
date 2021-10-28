@@ -107,10 +107,13 @@
                 # Here is a referense list of all the Azure AD Authentication an Authorization Error Codes:
                 # https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes
 
-                # Standard invalid password
+                # Standard invalid password 
+                # my modifications here
             If($RespErr -match "AADSTS50126")
                 {
-                continue
+                Write-Output "[*] WARNING! Valid user, but invalid password $username : $password."
+                $fullresults += "Valid user, but invalid password : $username"
+                #continue
                 }
 
                 # Invalid Tenant Response
