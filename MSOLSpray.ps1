@@ -111,7 +111,7 @@
                 # my modifications here
             If($RespErr -match "AADSTS50126")
                 {
-                Write-Output "[*] WARNING! Valid user, but invalid password $username : $password."
+                Write-Host -ForegroundColor "yellow" "[*] WARNING! Valid user, but invalid password for $username."
                 $fullresults += "Valid user, but invalid password : $username"
                 #continue
                 }
