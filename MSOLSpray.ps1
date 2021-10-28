@@ -111,9 +111,9 @@
                 # my modifications here
             If($RespErr -match "AADSTS50126")
                 {
+                #Write the accounts that result in the AADSTS error code AADSTS50126 (InvalidUserNameOrPassword) to both the screen as well as to the log file when using the -Outfile parameter.
                 Write-Host -ForegroundColor "yellow" "[*] WARNING! Valid user, but invalid password for $username."
                 $fullresults += "Valid user, but invalid password : $username"
-                #continue
                 }
 
                 # Invalid Tenant Response
