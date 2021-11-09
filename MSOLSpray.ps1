@@ -110,7 +110,7 @@
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-                continue
+                Write-Host -ForegroundColor "red" "[*] VALID user but INVALID password : $username"
                 }
 
                 # Invalid Tenant Response
