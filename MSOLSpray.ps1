@@ -76,7 +76,7 @@ function Invoke-MSOLSpray{
 
     [Parameter(Position = 4, Mandatory = $False)]
     [Int]
-    $Delay = 10,
+    $Delay = 0,
 
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 3, Mandatory = $False)]
