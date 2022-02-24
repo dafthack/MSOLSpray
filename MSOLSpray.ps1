@@ -1,4 +1,4 @@
-﻿function Invoke-MSOLSpray{
+function Invoke-MSOLSpray{
 
 <#
     .SYNOPSIS
@@ -17,6 +17,10 @@
         
         UserList file filled with usernames one-per-line in the format "user@domain.com"
     
+    .PARAMETER UserName
+        
+        UserName to test against a given password. Format "user@domain.com"
+
     .PARAMETER Password
         
         A single password that will be used to perform the password spray.
@@ -58,6 +62,10 @@
     [string]
     $UserList = "",
 
+    [Parameter(Position = 1, Mandatory = $False)]
+    [string]
+    $UserName = "",
+
     [Parameter(Position = 2, Mandatory = $False)]
     [string]
     $Password = "",
@@ -73,7 +81,13 @@
   )
     
     $ErrorActionPreference= 'silentlycontinue'
-    $Usernames = Get-Content $UserList
+    $Usernames = @()
+    if ($PSBoundParameters.ContainsKey('userList')) {
+        $Usernames += Get-Content $UserList
+    } else {
+        $Usernames = $UserName
+    }
+    
     $count = $Usernames.count
     $curr_user = 0
     $lockout_count = 0
