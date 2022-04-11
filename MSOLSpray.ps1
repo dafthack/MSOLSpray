@@ -202,4 +202,5 @@
         Write-Output "Results have been written to $OutFile."
         }
     }
+    Write-Host ""
 }
