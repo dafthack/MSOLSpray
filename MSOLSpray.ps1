@@ -1,4 +1,5 @@
-﻿function Invoke-MSOLSpray{
+function Invoke-MSOLSpray{
+
 
 <#
     .SYNOPSIS
@@ -87,6 +88,7 @@
 
     ForEach ($username in $usernames){
         
+        # Adding an extra comment for reasons...
         # User counter
         $curr_user += 1
         Write-Host -nonewline "$curr_user of $count users tested`r"
