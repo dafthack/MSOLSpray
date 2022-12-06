@@ -109,10 +109,13 @@ function Invoke-MSOLSpray{
                 # Here is a referense list of all the Azure AD Authentication an Authorization Error Codes:
                 # https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes
 
-                # Standard invalid password
+                # Standard invalid password 
+                # my modifications here
             If($RespErr -match "AADSTS50126")
                 {
-                continue
+                #Write the accounts that result in the AADSTS error code AADSTS50126 (InvalidUserNameOrPassword) to both the screen as well as to the log file when using the -Outfile parameter.
+                Write-Host -ForegroundColor "yellow" "[*] WARNING! Valid user, but invalid password for $username."
+                $fullresults += "Valid user, but invalid password : $username"
                 }
 
                 # Invalid Tenant Response
