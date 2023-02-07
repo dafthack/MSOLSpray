@@ -71,7 +71,7 @@ function Invoke-MSOLSpray{
     $Delay = 5,
 	
     [Parameter(Position = 4, Mandatory = $False)]
-    [Int]
+    [string]
     $UserAgent  = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0",
 	
     # Change the URL if you are using something like FireProx
