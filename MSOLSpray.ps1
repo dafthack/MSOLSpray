@@ -107,7 +107,7 @@ function Invoke-MSOLSpray{
         # Setting up the web request
         $BodyParams = @{'resource' = 'https://graph.windows.net'; 'client_id' = '1b730954-1685-4b74-9bfd-dac224a7b894' ; 'client_info' = '1' ; 'grant_type' = 'password' ; 'username' = $username ; 'password' = $password ; 'scope' = 'openid'}
         #Add Special Headers for Firprox Here. ';' is seperation char. Example: 'X-My-X-HEADER' = 'VALUE'
-        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded';'X-My-X-Forwarded-For' = '127.0.0.1'}
+        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}#;'X-My-X-Forwarded-For' = '127.0.0.1'}
         if ($Delay) {
             Start-Sleep -Seconds $Delay
         }
