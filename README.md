@@ -26,7 +26,7 @@ Import-Module MSOLSpray.ps1
 Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020
 Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10
 Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10 -UserAgent UA -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox/ 
-Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10 UserAgent UA -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox/ -UserAgent SpecialString -OutFile valid-users.txt
+Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10 -UserAgent UA -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox/ -UserAgent SpecialString -OutFile valid-users.txt
 ```
 
 ### Invoke-MSOLSpray Options
