@@ -3,6 +3,10 @@ A password spraying tool for Microsoft Online accounts (Azure/O365). The script 
 
 BE VERY CAREFUL NOT TO LOCKOUT ACCOUNTS!
 
+# TODO:
+
+- Pass in Special Header thru CMDLine so you dont have to change in script.
+
 ## Why another spraying tool?
 Yes, I realize there are other password spraying tools for O365/Azure. The main difference with this one is that this tool not only is looking for valid passwords, but also the extremely verbose information Azure AD error codes give you. These error codes provide information relating to if MFA is enabled on the account, if a tenant doesn't exist, if a user doesn't exist, if the account is locked, if the account is disabled, if the password is expired and much more.
 
