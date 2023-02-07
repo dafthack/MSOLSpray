@@ -30,3 +30,6 @@ OutFile   - A file to output valid results to.
 Force     - Forces the spray to continue and not stop when multiple account lockouts are detected.
 URL       - The URL to spray against. Potentially useful if pointing at an API Gateway URL generated with something like FireProx to randomize the IP address you are authenticating from.
 ```
+
+### Shout out to contributor
+- github.com/ceramicskate0/
