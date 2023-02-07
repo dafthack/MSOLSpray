@@ -8,7 +8,7 @@ Yes, I realize there are other password spraying tools for O365/Azure. The main 
 
 So this doubles, as not only a password spraying tool but also a Microsoft Online recon tool that will provide account/domain enumeration. In limited testing it appears that on valid login to the Microsoft Online OAuth2 endpoint it isn't auto-triggering MFA texts/push notifications making this really useful for finding valid creds without alerting the target.
 
-Lastly, this tool works well with [FireProx](https://github.com/ustayready/fireprox) to rotate source IP addresses on authentication requests. In testing this appeared to avoid getting blocked by Azure Smart Lockout.
+Lastly, this tool works well with [FireProx](https://github.com/ustayready/fireprox) to rotate source IP addresses on authentication requests. In testing this appeared to avoid getting blocked by Azure Smart Lockout. HEY! Go into script and add fireprox headers to spoof.
 
 **Brought to you by:**
 
@@ -32,6 +32,8 @@ Password  - A single password that will be used to perform the password spray.
 OutFile   - A file to output valid results to.
 Force     - Forces the spray to continue and not stop when multiple account lockouts are detected.
 URL       - The URL to spray against. Potentially useful if pointing at an API Gateway URL generated with something like FireProx to randomize the IP address you are authenticating from.
+Delay     - Number of seconds to wait between requests. (int)
+UserAgent - Spoof User Agent string.
 ```
 
 ### Shout out to contributors
