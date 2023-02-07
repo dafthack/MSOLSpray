@@ -77,7 +77,7 @@ function Invoke-MSOLSpray{
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 5, Mandatory = $False)]
     [string]
-    $URL = "https://login.microsoft.com ",
+    $URL = "https://login.microsoft.com",
 
     [Parameter(Position = 6, Mandatory = $False)]
     [switch]
