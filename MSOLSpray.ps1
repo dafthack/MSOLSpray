@@ -141,7 +141,7 @@ function Invoke-MSOLSpray{
                 # Invalid Username
             ElseIf($RespErr -match "AADSTS50034")
                 {
-                #Write-Output "[*] WARNING! The user $username doesn't exist."
+                 Write-Output "[*] WARNING! The user $username doesn't exist."
                 }
 
                 # Microsoft MFA response
@@ -185,7 +185,7 @@ function Invoke-MSOLSpray{
                 # Unknown errors
             Else
                 {
-                Write-Output "[*] Got an error we haven't seen yet for user $username"
+                Write-Output "[*] Got an error we haven't seen yet for user $username = $RespErr"
                 $RespErr
                 }
         }
