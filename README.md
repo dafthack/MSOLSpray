@@ -20,6 +20,9 @@ You will need a userlist file with target email addresses one per line. Open a P
 ```PowerShell
 Import-Module MSOLSpray.ps1
 Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020
+Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10
+Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10 -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox/ 
+Invoke-MSOLSpray -UserList .\userlist.txt -Password Winter2020 -Delay 10 -URL https://api-gateway-endpoint-id.execute-api.us-east-1.amazonaws.com/fireprox/ -UserAgent SpecialString -OutFile valid-users.txt
 ```
 
 ### Invoke-MSOLSpray Options
@@ -31,5 +34,8 @@ Force     - Forces the spray to continue and not stop when multiple account lock
 URL       - The URL to spray against. Potentially useful if pointing at an API Gateway URL generated with something like FireProx to randomize the IP address you are authenticating from.
 ```
 
-### Shout out to contributor
+### Shout out to contributors
 - https://github.com/ceramicskate0/
+- https://github.com/rvrsh3ll
+- https://github.com/davidnibbe
+- https://github.com/justin-p
