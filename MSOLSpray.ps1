@@ -72,9 +72,9 @@ function Invoke-MSOLSpray{
     [Int]
     $Delay = 5,
 	
-	[Parameter(Position = 2, Mandatory = $False)]
+    [Parameter(Position = 2, Mandatory = $False)]
     [Int]
-    $UserAgent  = $(Get-InvokeMSOLUserAgent),
+    $UserAgent  = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0",
 	
     # Change the URL if you are using something like FireProx
     [Parameter(Position = 3, Mandatory = $False)]
@@ -85,21 +85,6 @@ function Invoke-MSOLSpray{
     [switch]
     $Force
   )
-  
-    Function Get-InvokeMSOLUserAgent {
-    <#
-        .LINK
-        https://github.com/justin-p/PowerShell/blob/master/Get-UserAgent.ps1
-    #>
-    Param (
-        [ValidateSet('Firefox', 'Chrome', 'InternetExplorer', 'Opera', 'Safari')]
-        [string]$BrowserType
-    )
-    if (!$BrowserType) {
-        $BrowserType = Get-Random -InputObject @('Firefox', 'Chrome', 'InternetExplorer', 'Opera', 'Safari')
-    }
-    Return [string]$([Microsoft.PowerShell.Commands.PSUserAgent]::$BrowserType)
-}
 
     $ErrorActionPreference= 'silentlycontinue'
     $Usernames = Get-Content $UserList
