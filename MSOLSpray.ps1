@@ -128,7 +128,7 @@ function Invoke-MSOLSpray{
         if ($Delay) {
             Start-Sleep -Seconds $Delay
         }
-		$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
+		$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -UserAgent $UserAgent -ErrorVariable RespErr 
 
         # If we get a 200 response code it's a valid cred
         If ($webrequest.StatusCode -eq "200"){
