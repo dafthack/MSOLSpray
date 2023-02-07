@@ -54,8 +54,6 @@ function Invoke-MSOLSpray{
         This command uses the specified FireProx URL to spray from randomized IP addresses and writes the output to a file. See this for FireProx setup: https://github.com/ustayready/fireprox.
 #>
   Param(
-
-
     [Parameter(Position = 0, Mandatory = $False)]
     [string]
     $OutFile = "",
@@ -68,20 +66,20 @@ function Invoke-MSOLSpray{
     [string]
     $Password = "",
 	
-    [Parameter(Position = 2, Mandatory = $False)]
+    [Parameter(Position = 3, Mandatory = $False)]
     [Int]
     $Delay = 5,
 	
-    [Parameter(Position = 2, Mandatory = $False)]
+    [Parameter(Position = 4 Mandatory = $False)]
     [Int]
     $UserAgent  = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0",
 	
     # Change the URL if you are using something like FireProx
-    [Parameter(Position = 3, Mandatory = $False)]
+    [Parameter(Position = 5, Mandatory = $False)]
     [string]
     $URL = "https://login.microsoft.com ",
 
-    [Parameter(Position = 4, Mandatory = $False)]
+    [Parameter(Position = 6, Mandatory = $False)]
     [switch]
     $Force
   )
