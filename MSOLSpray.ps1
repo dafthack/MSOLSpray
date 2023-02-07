@@ -127,7 +127,7 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-				Write-Output "[*] WARNING! Valid user, but invalid password $username : $password."
+				Write-Output "[*] WARNING! Valid user, but invalid password $username : $password"
                 $fullresults += "Valid user, but invalid password : $username"
 				#continue
                 }
