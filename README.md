@@ -32,4 +32,4 @@ URL       - The URL to spray against. Potentially useful if pointing at an API G
 ```
 
 ### Shout out to contributor
-- github.com/ceramicskate0/
+- https://github.com/ceramicskate0/
