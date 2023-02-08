@@ -117,7 +117,7 @@ function Invoke-MSOLSpray{
 
        # If we get a 200 response code it's a valid cred
         If ($webrequest.StatusCode -eq "200"){
-        Write-Host -ForegroundColor "green" "[+] $username : $password"
+            Write-Host -ForegroundColor "green" "[+] $username : $password"
             $webrequest = ""
             $fullresults += "$username : $password"
         }
@@ -129,7 +129,7 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-                Write-Output -ForegroundColor "white" "[*] Valid user, but invalid password $username : $password"
+                Write-Host -ForegroundColor "white" "[*] Valid user, but invalid password $username : $password"
                 $fullresults += "Valid user, but invalid password : $username"
                 #continue
                 }
@@ -137,13 +137,13 @@ function Invoke-MSOLSpray{
                 # Invalid Tenant Response
             ElseIf (($RespErr -match "AADSTS50128") -or ($RespErr -match "AADSTS50059"))
                 {
-                Write-Output -ForegroundColor "yellow" "[-] Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
+                Write-Host -ForegroundColor "yellow" "[-] Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
                 }
 
                 # Invalid Username
             ElseIf($RespErr -match "AADSTS50034")
                 {
-                 Write-Output -ForegroundColor "yellow" "[-] $username doesn't exist. Invalid Username."
+                 Write-Host -ForegroundColor "yellow" "[-] $username doesn't exist. Invalid Username."
                 }
 
                 # Microsoft MFA response
@@ -163,14 +163,14 @@ function Invoke-MSOLSpray{
                 # Locked out account or Smart Lockout in place
             ElseIf($RespErr -match "AADSTS50053")
                 {
-                Write-Output -ForegroundColor "yellow" "[-] The account $username appears to be locked."
+                Write-Host -ForegroundColor "yellow" "[-] The account $username appears to be locked."
                 $lockout_count++
                 }
 
                 # Disabled account
             ElseIf($RespErr -match "AADSTS50057")
                 {
-                Write-Output -ForegroundColor "yellow" "[-] The account $username appears to be disabled."
+                Write-Host -ForegroundColor "yellow" "[-] The account $username appears to be disabled."
                 }
             
                 # User password is expired
@@ -187,7 +187,7 @@ function Invoke-MSOLSpray{
                 # Unknown errors
             Else
                 {
-                Write-Output -ForegroundColor "red" "[!] Got an error we haven't seen yet for user $username = $RespErr"
+                Write-Host -ForegroundColor "red" "[!] Got an error we haven't seen yet for user $username = $RespErr"
                 $RespErr
                 }
         }
