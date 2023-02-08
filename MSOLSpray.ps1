@@ -129,9 +129,9 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-				Write-Output "[*] Valid user, but invalid password $username : $password"
+                Write-Output -ForegroundColor "white" "[*] Valid user, but invalid password $username : $password"
                 $fullresults += "Valid user, but invalid password : $username"
-				#continue
+                #continue
                 }
 
                 # Invalid Tenant Response
