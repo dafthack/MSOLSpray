@@ -163,7 +163,7 @@ function Invoke-MSOLSpray{
                 # Locked out account or Smart Lockout in place
             ElseIf($RespErr -match "AADSTS50053")
                 {
-                Write-Host -ForegroundColor "yellow" "[-] The account $username appears to be locked."
+                Write-Host -ForegroundColor "red" "[!] The account $username appears to be locked."
                 $lockout_count++
                 }
 
